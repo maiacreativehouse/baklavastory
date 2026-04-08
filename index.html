@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Review Responder – baklavastory.</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap');
+
+    :root {
+      --yellow:      #F6B800;
+      --yellow-light:#FFCF4D;
+      --yellow-pale: #FFFBEA;
+      --yellow-deep: #D99E00;
+      --dark:        #111111;
+      --dark-mid:    #3A3020;
+      --muted:       #7A6C50;
+      --light:       #F9F6EE;
+      --white:       #FFFFFF;
+      --border:      #EDE0B8;
+      --border-soft: #F0EAD6;
+      --green:       #1E6B2E;
+      --red:         #B91C1C;
+      --shadow:      rgba(17,17,17,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─────────────────────────────────────────── */
+    .header {
+      background: var(--yellow);
+      padding: 36px 24px 32px;
+      text-align: center;
+    }
+
+    /* Logo mark -rolling pin + bowl SVG inline */
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .logo-mark svg {
+      width: 72px;
+      height: 72px;
+    }
+
+    .brand-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .brand-tagline {
+      font-size: 13px;
+      color: rgba(17,17,17,0.55);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+    }
+    .header-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(17,17,17,0.10);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Main ───────────────────────────────────────────── */
+    .main { max-width: 700px; margin: 0 auto; padding: 28px 18px 60px; }
+
+    /* ─── Steps bar ──────────────────────────────────────── */
+    .steps {
+      display: flex;
+      background: var(--white);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+    .step {
+      flex: 1;
+      padding: 12px 8px;
+      text-align: center;
+      border-right: 1px solid var(--border-soft);
+    }
+    .step:last-child { border-right: none; }
+    .step-num {
+      width: 22px; height: 22px;
+      background: var(--yellow-pale);
+      border: 1.5px solid var(--yellow);
+      color: var(--dark-mid);
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 5px;
+    }
+    .step-label { font-size: 10px; color: var(--muted); font-weight: 500; line-height: 1.3; }
+
+    /* ─── Card ───────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--border-soft);
+      padding: 28px 24px;
+      box-shadow: 0 4px 24px var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border-soft);
+      margin: 22px 0;
+    }
+
+    /* ─── Textarea ───────────────────────────────────────── */
+    .paste-wrap { position: relative; }
+    textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      background: var(--light);
+      resize: vertical;
+      min-height: 110px;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      line-height: 1.6;
+    }
+    textarea:focus { border-color: var(--yellow); background: var(--white); }
+    textarea::placeholder { color: #BBA870; }
+    .char-count {
+      position: absolute; bottom: 10px; right: 14px;
+      font-size: 10px; color: #ccc;
+      pointer-events: none;
+    }
+
+    /* ─── Extra context field ────────────────────────────── */
+    .extra-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      background: var(--light);
+      resize: vertical;
+      min-height: 76px;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      line-height: 1.6;
+    }
+    .extra-input:focus { border-color: var(--yellow); background: var(--white); }
+    .extra-input::placeholder { color: #BBA870; }
+
+    /* ─── Star rating ────────────────────────────────────── */
+    .star-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .star-opt {
+      flex: 1;
+      min-width: 50px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--white);
+    }
+    .star-opt:hover { border-color: var(--yellow); background: var(--yellow-pale); }
+    .star-opt.active { border-color: var(--yellow); background: var(--yellow-pale); }
+    .star-opt .stars { font-size: 12px; color: #ddd; white-space: nowrap; }
+    .star-opt.active .stars { color: var(--yellow); }
+    .star-opt .star-n { font-size: 10px; color: var(--muted); font-weight: 600; }
+
+    .sentiment {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      margin-top: 10px;
+    }
+    .sentiment.positive { background: #ECFDF5; color: var(--green); }
+    .sentiment.neutral  { background: #FEFCE8; color: #854D0E; }
+    .sentiment.negative { background: #FEF2F2; color: var(--red); }
+
+    /* ─── Tone / Language chips ──────────────────────────── */
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      padding: 7px 16px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      font-size: 12px; font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .chip:hover { border-color: var(--yellow); color: var(--dark); }
+    .chip.active { background: var(--dark); border-color: var(--dark); color: var(--white); }
+    .chip.active-yellow { background: var(--yellow); border-color: var(--yellow); color: var(--dark); }
+
+    /* ─── Generate button ────────────────────────────────── */
+    .generate-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--dark);
+      color: var(--white);
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 22px;
+      letter-spacing: 0.01em;
+      box-shadow: 0 4px 16px rgba(17,17,17,0.2);
+    }
+    .generate-btn:hover {
+      background: var(--dark-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(17,17,17,0.25);
+    }
+    .generate-btn:active { transform: none; }
+
+    /* ─── Output card ────────────────────────────────────── */
+    .output-card {
+      display: none;
+      background: var(--white);
+      border-radius: 20px;
+      border: 1.5px solid var(--yellow);
+      padding: 26px;
+      box-shadow: 0 4px 24px var(--shadow);
+      margin-bottom: 16px;
+    }
+    .output-card.visible { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .output-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
+    }
+    .output-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px; color: var(--dark);
+    }
+    .output-badge {
+      font-size: 10px; font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: var(--yellow);
+      color: var(--dark);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Customer review echo */
+    .review-ctx {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      border-left: 3px solid var(--border);
+    }
+    .review-ctx-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted); margin-bottom: 5px;
+    }
+    .review-ctx-stars { color: var(--yellow); font-size: 13px; margin-bottom: 3px; }
+    .review-ctx-text { font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.55; }
+
+    /* Response text */
+    .response-text {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--dark);
+      background: var(--yellow-pale);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .output-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .copy-btn {
+      flex: 1;
+      padding: 13px;
+      background: var(--yellow);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-size: 14px; font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 2px 10px rgba(246,184,0,0.3);
+    }
+    .copy-btn:hover { background: var(--yellow-deep); }
+    .copy-btn.copied { background: #D1FAE5; color: var(--green); box-shadow: none; }
+
+    .regen-btn {
+      padding: 13px 20px;
+      background: var(--white);
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px; font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .regen-btn:hover { border-color: var(--yellow); color: var(--dark); }
+
+    /* ─── Tips ───────────────────────────────────────────── */
+    .tips-card {
+      background: var(--white);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 20px 22px;
+    }
+    .tips-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+    .tip { display: flex; gap: 10px; font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 8px; }
+    .tip:last-child { margin-bottom: 0; }
+    .tip-dot { width: 5px; height: 5px; background: var(--yellow); border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+
+    /* ─── Error ──────────────────────────────────────────── */
+    .error-msg {
+      display: none;
+      background: #FEF2F2; border: 1px solid #FECACA;
+      border-radius: 10px; padding: 9px 14px;
+      font-size: 12px; color: var(--red); margin-top: 8px;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    .footer {
+      text-align: center; padding: 16px;
+      font-size: 11px; color: var(--muted); opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Header ─── -->
+<div class="header">
+  <!-- Inline SVG logo inspired by rolling pin + baklava -->
+  <div class="logo-mark">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Rolling pin handle left -->
+      <rect x="4" y="34" width="14" height="12" rx="6" fill="#111111"/>
+      <!-- Rolling pin body -->
+      <rect x="16" y="28" width="48" height="24" rx="5" fill="#111111"/>
+      <!-- Rolling pin handle right -->
+      <rect x="62" y="34" width="14" height="12" rx="6" fill="#111111"/>
+      <!-- Baklava diamond highlights on the roller -->
+      <rect x="30" y="36" width="8" height="8" rx="1" transform="rotate(45 34 40)" fill="#F6B800"/>
+      <rect x="44" y="36" width="8" height="8" rx="1" transform="rotate(45 48 40)" fill="#F6B800"/>
+    </svg>
+  </div>
+  <div class="brand-name">baklavastory.</div>
+  <div class="brand-tagline">freshly made with love</div>
+  <div class="header-pill">⭐ Google Review Responder</div>
+</div>
+
+<!-- ─── Main ─── -->
+<div class="main">
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-label">Paste review</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-label">Star rating</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-label">Tone & language</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-label">Extra context</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-label">Generate & copy</div></div>
+  </div>
+
+  <!-- Form card -->
+  <div class="card">
+
+    <!-- 1. Review -->
+    <p class="section-label">Customer's Review</p>
+    <div class="paste-wrap">
+      <textarea id="reviewInput" maxlength="1500"
+        placeholder="Paste the customer's Google review here…&#10;&#10;e.g. &quot;The pistachio baklava is absolutely incredible. Hands down the best I've had outside of Istanbul. Will be back every week!&quot;"
+        oninput="onReviewInput()"></textarea>
+      <div class="char-count" id="charCount">0 / 1500</div>
+    </div>
+    <div class="error-msg" id="errorMsg">Please paste the customer's review before generating a response.</div>
+
+    <hr class="divider"/>
+
+    <!-- 2. Star rating -->
+    <p class="section-label">Review Star Rating</p>
+    <div class="star-row" id="starRow">
+      <div class="star-opt" data-val="1" onclick="setStars(1)">
+        <span class="stars">★</span><span class="star-n">1 star</span>
+      </div>
+      <div class="star-opt" data-val="2" onclick="setStars(2)">
+        <span class="stars">★★</span><span class="star-n">2 stars</span>
+      </div>
+      <div class="star-opt" data-val="3" onclick="setStars(3)">
+        <span class="stars">★★★</span><span class="star-n">3 stars</span>
+      </div>
+      <div class="star-opt" data-val="4" onclick="setStars(4)">
+        <span class="stars">★★★★</span><span class="star-n">4 stars</span>
+      </div>
+      <div class="star-opt active" data-val="5" onclick="setStars(5)">
+        <span class="stars">★★★★★</span><span class="star-n">5 stars</span>
+      </div>
+    </div>
+    <div id="sentimentBadge" class="sentiment positive">😊 Positive -warm thank-you response</div>
+
+    <hr class="divider"/>
+
+    <!-- 3. Tone -->
+    <p class="section-label">Response Tone</p>
+    <div class="chip-row" id="toneRow">
+      <button class="chip active" data-tone="warm" onclick="setTone(this,'warm')">🤗 Warm & Personal</button>
+      <button class="chip" data-tone="professional" onclick="setTone(this,'professional')">💼 Professional</button>
+      <button class="chip" data-tone="short" onclick="setTone(this,'short')">⚡ Short & Sweet</button>
+      <button class="chip" data-tone="apologetic" onclick="setTone(this,'apologetic')">🙏 Apologetic</button>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- Language -->
+    <p class="section-label">Language</p>
+    <div class="chip-row" id="langRow">
+      <button class="chip active" data-lang="en" onclick="setLang(this,'en')">🇺🇸 English</button>
+      <button class="chip" data-lang="tr" onclick="setLang(this,'tr')">🇹🇷 Turkish</button>
+      <button class="chip" data-lang="es" onclick="setLang(this,'es')">🇪🇸 Spanish</button>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 4. Extra context -->
+    <p class="section-label">Extra Context <span style="text-transform:none;font-weight:400;letter-spacing:0;font-size:11px;color:var(--muted);">(optional -personalises the response)</span></p>
+    <textarea class="extra-input" id="extraContext"
+      placeholder="e.g. We were short-staffed that morning, or they mentioned the almond baklava…&#10;&#10;Anything that helps make the reply feel more genuine and specific."></textarea>
+
+    <button class="generate-btn" onclick="generateResponse()">
+      ✨ Generate Response
+    </button>
+
+  </div>
+
+  <!-- Output card -->
+  <div class="output-card" id="outputCard">
+    <div class="output-header">
+      <span class="output-title">Your Response</span>
+      <span class="output-badge" id="outputBadge">5★ · Warm</span>
+    </div>
+
+    <div class="review-ctx">
+      <div class="review-ctx-stars" id="ctxStars"></div>
+      <div class="review-ctx-label">Customer wrote:</div>
+      <div class="review-ctx-text" id="ctxReview"></div>
+    </div>
+
+    <div class="response-text" id="responseText"></div>
+
+    <div class="output-actions">
+      <button class="copy-btn" id="copyBtn" onclick="copyResponse()">📋 Copy Response</button>
+      <button class="regen-btn" onclick="generateResponse()">↺ Try another version</button>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="tips-card">
+    <div class="tips-title">💡 Tips for replying to Google reviews</div>
+    <div class="tip"><div class="tip-dot"></div><span>Reply within <strong>24–48 hours</strong> -speed signals that you care.</span></div>
+    <div class="tip"><div class="tip-dot"></div><span>Use the reviewer's <strong>first name</strong> if visible -it makes the reply feel personal.</span></div>
+    <div class="tip"><div class="tip-dot"></div><span>For negative reviews, <strong>never argue</strong> -acknowledge, apologise, and invite them back.</span></div>
+    <div class="tip"><div class="tip-dot"></div><span>Keep it <strong>3–5 sentences</strong>. Potential new customers read your replies too.</span></div>
+    <div class="tip"><div class="tip-dot"></div><span>Mention a <strong>specific detail</strong> from the review -it proves you actually read it.</span></div>
+  </div>
+
+</div>
+
+<div class="footer">baklavastory. · 1830 Harrison St, San Francisco · freshly made with love</div>
+
+<script>
+  let selectedStars = 5;
+  let selectedTone  = 'warm';
+  let selectedLang  = 'en';
+
+  // ── UI controls ─────────────────────────────────────────────────────────
+
+  function onReviewInput() {
+    const val = document.getElementById('reviewInput').value;
+    document.getElementById('charCount').textContent = val.length + ' / 1500';
+    document.getElementById('errorMsg').classList.remove('visible');
+  }
+
+  function setStars(n) {
+    selectedStars = n;
+    document.querySelectorAll('.star-opt').forEach(el =>
+      el.classList.toggle('active', parseInt(el.dataset.val) === n));
+
+    const badge = document.getElementById('sentimentBadge');
+    if (n >= 4) {
+      badge.className = 'sentiment positive';
+      badge.textContent = n === 5 ? '😊 Positive -warm thank-you response' : '😊 Good -grateful & encouraging response';
+    } else if (n === 3) {
+      badge.className = 'sentiment neutral';
+      badge.textContent = '😐 Mixed -acknowledge the positives, address the gaps';
+    } else {
+      badge.className = 'sentiment negative';
+      badge.textContent = '😔 Negative -empathetic, apologetic, invite to return';
+      // Auto-switch to apologetic
+      document.querySelectorAll('#toneRow .chip').forEach(c =>
+        c.classList.toggle('active', c.dataset.tone === 'apologetic'));
+      selectedTone = 'apologetic';
+    }
+  }
+
+  function setTone(el, val) {
+    selectedTone = val;
+    document.querySelectorAll('#toneRow .chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function setLang(el, val) {
+    selectedLang = val;
+    document.querySelectorAll('#langRow .chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function truncate(str, max) {
+    return str.length > max ? str.substring(0, max).trim() + '…' : str;
+  }
+
+  // Weave extra context into a base response naturally
+  function weaveContext(base, context, lang) {
+    if (!context) return base;
+    const ctx = context.trim();
+    if (!ctx) return base;
+
+    const bridges = {
+      en: [
+        `\n\nWe also appreciate you mentioning -${ctx}. We take that to heart.`,
+        `\n\nAnd regarding ${ctx} -we really appreciate you sharing that with us.`,
+        `\n\nWe noted your comment about ${ctx}, and it means a lot to us.`,
+      ],
+      tr: [
+        `\n\n${ctx} hakkındaki yorumunuz için de teşekkür ederiz -bu bizim için çok değerli.`,
+        `\n\n${ctx} konusundaki geri bildiriminizi dikkate alıyoruz.`,
+      ],
+      es: [
+        `\n\nTambién agradecemos que hayas mencionado ${ctx} -lo tenemos muy en cuenta.`,
+        `\n\nTu comentario sobre ${ctx} nos llega al corazón.`,
+      ],
+    };
+    return base + pick(bridges[lang] || bridges.en);
+  }
+
+  // ── Response templates ───────────────────────────────────────────────────
+
+  const responses = {
+    en: {
+      warm: {
+        5: [
+          "Thank you so much for this! 🙏 It truly means the world to us to know you enjoyed the baklava. Every piece is made by hand with the finest ingredients we can source, and your kind words remind us exactly why we do this. We can't wait to welcome you back!",
+          "Wow, this made our whole day. Thank you! 😊 Knowing that our baklava brought you joy is honestly the greatest reward we could ask for. We put our heart into every single tray, and it means everything when guests feel that. See you again soon! 💛",
+          "This truly warms our hearts. 💛 We care deeply about every ingredient and every bite, and knowing that comes through makes it all worth it. Hope to see you at Baklava Story very soon!",
+          "Reviews like this are the reason we show up every morning. Thank you so much! 🙏 We're glad the baklava hit the spot, and we'd love to see you again.",
+          "We're so happy you stopped by! 😊 Everything we make comes from a place of real love for the craft, so hearing this feels wonderful. Please come back soon. 💛",
+          "Thank you, this is so kind! 🙏 We're proud of every piece that leaves our kitchen, and it means a lot to know it lands well. Looking forward to your next visit!",
+          "You just made our day with this. Thank you! 💛 Baklava is our passion, and we put everything we have into getting it right. Can't wait to see you again.",
+        ],
+        4: [
+          "So glad you enjoyed your visit! 😊 We're always working to make things even better, and reviews like yours genuinely push us to keep going. Looking forward to seeing you again!",
+          "Really happy to hear you had a great time. We're always refining things behind the scenes, so hope your next visit is even better. See you soon! 💛",
+          "This means a lot to us, thank you! 😊 We want every visit to feel special, and we'll keep working until it does. Hope to see you back soon.",
+          "Thank you for the kind words! We never stop trying to get better, and feedback like this keeps us going. See you next time! 💛",
+          "Glad you had a good experience! We're always fine-tuning and improving, so come back and see what's new. 😊",
+        ],
+        3: [
+          "Thank you for the honest feedback. 🙏 We're glad parts of your visit were enjoyable, and we take everything you shared seriously. We'd genuinely love another chance to show you what we're capable of. Please come back!",
+          "Your feedback means a lot and we hear you. We'd love another chance to make it right. Hope to see you back soon. 💛",
+          "Thank you for being honest with us. 🙏 We know we don't always get everything perfect, but we care a lot about improving. We hope you'll give us another try.",
+          "We appreciate you sharing this. Every piece of feedback helps us grow, and we genuinely hope your next visit is a better one. 💛",
+        ],
+        2: [
+          "Thank you for sharing this with us, and we sincerely apologise that your experience didn't meet your expectations. 🙏 That's never what we want for our guests. We'd love the chance to make it right, so please feel free to reach out to us directly. We hope you'll give us another opportunity.",
+          "We're really sorry to hear this. 🙏 Your experience matters to us a lot, and we don't want to leave things this way. Please reach out so we can make it right.",
+          "We hear you, and we're sorry. 🙏 We hold ourselves to a high standard and clearly fell short here. We'd love the chance to turn this around for you.",
+        ],
+        1: [
+          "We're truly sorry to hear about your experience and we sincerely apologise. 🙏 This does not reflect the standard we hold ourselves to, and your feedback matters deeply to us. We'd very much like to understand what happened and make it right. Please reach out to us directly.",
+          "We are so sorry. 🙏 What you experienced is not okay and not what we stand for. Please contact us directly so we can make this right.",
+          "This is not the experience we want anyone to have, and we're genuinely sorry. 🙏 Please reach out to us. We want to understand what went wrong and do better.",
+        ],
+      },
+      professional: {
+        5: [
+          "Thank you for your wonderful review. We are delighted to hear that you enjoyed your visit and our baklava. Quality and authenticity are at the heart of everything we do at Baklava Story, and it is deeply rewarding to know that comes through. We look forward to welcoming you again.",
+          "Your kind words mean a great deal to us. Quality and authenticity are at the heart of everything we do, and it is rewarding to know that comes through in every bite. We look forward to welcoming you again.",
+          "We are very grateful for your review. Our team takes tremendous pride in the quality of our baklava, and feedback like yours confirms we are on the right track. We look forward to your next visit.",
+          "Thank you for your thoughtful review. We are committed to providing an exceptional product, and it is gratifying to know that our standards are being felt by our guests. We hope to see you again soon.",
+          "We appreciate your kind feedback. It is always encouraging to hear that our dedication to quality and authenticity is appreciated. We look forward to welcoming you back to Baklava Story.",
+        ],
+        4: [
+          "Thank you for your kind review. We are pleased to hear you enjoyed your visit and look forward to serving you again.",
+          "We appreciate your positive feedback. We are always working to improve and hope to offer you an even better experience next time.",
+          "Thank you for visiting us and for sharing your experience. We look forward to welcoming you back.",
+          "We are glad to hear your visit was enjoyable. Your feedback is valued and we hope to see you again soon.",
+        ],
+        3: [
+          "Thank you for your feedback. We take all reviews seriously as they help us continuously improve. We hope to have the opportunity to exceed your expectations on your next visit.",
+          "We appreciate your honest review. We are committed to improving and hope your next experience with us is a more positive one.",
+          "Thank you for letting us know. We take this feedback seriously and will use it to do better. We hope you will give us another chance.",
+        ],
+        2: [
+          "Thank you for sharing your feedback. We sincerely apologise that your experience did not meet our usual standard. We would welcome the opportunity to address your concerns directly. Please do not hesitate to contact us.",
+          "We apologise for the experience you had. This is not the standard we hold ourselves to, and we would appreciate the chance to make it right. Please reach out to us directly.",
+        ],
+        1: [
+          "We sincerely apologise for the experience you described. This is not in line with our values or the standard of service we strive to provide. We would welcome the opportunity to discuss this and make things right. Please contact us directly.",
+          "We are truly sorry for what you experienced. This falls well below the standard we set for ourselves, and we would very much like to make it right. Please reach out to us directly.",
+        ],
+      },
+      short: {
+        5: [
+          "Thank you so much! 🙏 Your kind words mean everything to us. See you soon! 💛",
+          "This made our whole day. Thank you! We hope to see you again very soon. ✨",
+          "So grateful for your support. It's exactly why we do what we do! Come back soon 💛",
+          "Thank you! This is so lovely to read. 😊 See you next time!",
+          "You made us smile. Thank you! 💛 See you soon.",
+          "Thank you so much! Reviews like this mean the world. 🙏 Come back anytime!",
+          "We really appreciate this. 😊 Hope to see you again soon! 💛",
+        ],
+        4: [
+          "Thank you for the lovely review! So glad you enjoyed it. See you next time! 😊",
+          "Really appreciate you sharing this. Means a lot. See you soon! 💛",
+          "Thanks for the kind words! 😊 Looking forward to your next visit.",
+          "So happy to hear this! See you again soon. 💛",
+        ],
+        3: [
+          "Thank you for the honest feedback! We'd love another chance to impress you. 🙏",
+          "We hear you, and we appreciate it. Hope to do better next time! 🙏",
+          "Thanks for being real with us. 🙏 We'll keep working on it.",
+        ],
+        2: [
+          "We're sorry to hear this and truly appreciate your feedback. We'd love to make it right. Please reach out to us. 🙏",
+          "We're sorry. This isn't good enough and we want to fix it. Please contact us! 🙏",
+        ],
+        1: [
+          "We sincerely apologise for your experience. We want to make it right. Please reach out to us directly. 🙏",
+          "We are so sorry. Please contact us directly so we can make this right. 🙏",
+        ],
+      },
+      apologetic: {
+        5: [
+          "Thank you for this wonderful review! We're so grateful you had a great experience. Your support means absolutely everything to us. 🙏 We hope to see you again very soon!",
+          "We are so relieved and happy to read this! Thank you for giving us the chance to serve you, and for sharing your experience. 🙏 See you soon! 💛",
+          "This is so kind of you. Thank you! 🙏 We always want every guest to leave happy, and we're so glad you did. Can't wait to welcome you back.",
+          "Reviews like this make everything worthwhile. Thank you from the bottom of our hearts. 🙏 We hope to see you again very soon! 💛",
+        ],
+        4: [
+          "Thank you so much for your kind words and for giving us the opportunity to serve you! We're so glad your visit was enjoyable. We hope to welcome you back again soon. 🙏",
+          "We really appreciate this! We're glad you had a good time and we'd love to make your next visit even better. 🙏 See you soon! 💛",
+          "Thank you for this. We genuinely care about every guest's experience, and it means a lot to know yours was a positive one. 🙏",
+        ],
+        3: [
+          "Thank you for sharing your experience, and we sincerely apologise for any aspect that fell short of your expectations. 🙏 Your feedback is invaluable and we are genuinely committed to doing better. We truly hope you'll give us another chance.",
+          "We're grateful you told us this, and we're sorry we didn't fully deliver. 🙏 We'd really love another opportunity to show you what we're capable of.",
+          "Thank you for being honest with us. 🙏 We apologise for the parts that didn't meet the mark, and we hope you'll come back so we can do better.",
+        ],
+        2: [
+          "We are truly sorry for the experience you had and we deeply appreciate you letting us know. 🙏 We completely understand your frustration and we want to make this right. Please reach out to us. Your satisfaction means everything to us.",
+          "We're so sorry. This is not the experience we want anyone to have, and we genuinely want to fix it. 🙏 Please contact us directly and we will do our best to make it right.",
+        ],
+        1: [
+          "We are deeply sorry for what you experienced and we sincerely apologise. 🙏 Please know that this is not how we want any of our guests to feel. We would be grateful for the chance to speak with you directly and make things right.",
+          "We are very sorry. 🙏 What you described is not acceptable, and we take full responsibility. Please reach out to us directly so we can make this right.",
+        ],
+      },
+    },
+
+    tr: {
+      warm: {
+        5: [
+          "Bu güzel yorum için çok teşekkür ederiz! 🙏 Baklavalarımızı beğendiğinizi bilmek bizim için paha biçilemez. Her parçayı en kaliteli malzemelerle ve sevgiyle hazırlıyoruz, güzel sözleriniz bize ilham veriyor. Sizi tekrar görmekten mutluluk duyarız! 💛",
+          "Bu harika yorumunuz için teşekkürler! 😊 Baklavamızın sizi mutlu ettiğini bilmek en büyük ödülümüz. Yakında tekrar bekliyoruz! 💛",
+          "Bu sözler gerçekten içimizi ısıttı. Çok teşekkür ederiz! 🙏 Her sabah işe bu yüzden geliyoruz. Yakında tekrar görüşmek dileğiyle! 💛",
+          "Ne güzel bir yorum, çok teşekkürler! 😊 Baklavaya olan sevgimizi hissetmeniz bizim için çok değerli. Sizi tekrar bekliyoruz! 🙏",
+        ],
+        4: [
+          "Güzel değerlendirmeniz için teşekkür ederiz! Ziyaretinizden memnun kaldığınıza çok sevindik. Daha iyi olabilmek için sürekli çalışıyoruz. Tekrar bekliyoruz! 😊",
+          "Yorumunuz için teşekkürler! Güzel bir deneyim yaşamanız bizi mutlu etti. Bir sonraki ziyaretinizde sizi daha da iyi ağırlamak isteriz. 💛",
+          "Teşekkür ederiz! Ziyaretinizden memnun kaldığınızı öğrenmek bizi gerçekten mutlu etti. Tekrar bekliyoruz! 😊",
+        ],
+        3: [
+          "Dürüst geri bildiriminiz için teşekkür ederiz. 🙏 Deneyiminizi iyileştirmek için elimizden geleni yapıyoruz. Tekrar gelmenizi ve daha güzel bir deneyim yaşamanızı umuyoruz.",
+          "Görüşleriniz bizim için çok değerli. 🙏 Eksiklerimiz olduğunu biliyoruz ve bunları gidermek için çalışıyoruz. Bize bir şans daha vermenizi umuyoruz.",
+        ],
+        2: [
+          "Geri bildiriminiz için teşekkür eder, beklentilerinizi karşılayamadığımız için özür dileriz. 🙏 Durumu düzeltmek istiyoruz, lütfen bizimle iletişime geçin.",
+          "Yaşadığınız için üzgünüz. 🙏 Bu bizim istediğimiz bir deneyim değil. Lütfen bize ulaşın, durumu düzeltelim.",
+        ],
+        1: [
+          "Yaşadığınız deneyim için gerçekten çok üzgünüz ve içtenlikle özür dileriz. 🙏 Lütfen doğrudan bizimle iletişime geçin, durumu düzeltmek isteriz.",
+          "Çok özür dileriz. 🙏 Bu kabul edilemez ve sizinle doğrudan konuşmak istiyoruz. Lütfen bize ulaşın.",
+        ],
+      },
+      professional: {
+        5: [
+          "Değerlendirmeniz için teşekkür ederiz. Baklavalarımızı beğenmeniz büyük memnuniyet kaynağıdır. Kalite ve özgünlük her zaman önceliğimizdir. Tekrar bekliyoruz.",
+          "Güzel yorumunuz için teşekkür ederiz. Ürünlerimizin kalitesini her zaman en üst düzeyde tutmaya çalışıyoruz. Tekrar görüşmek dileğiyle.",
+          "Değerlendirmeniz için teşekkür ederiz. Misafirlerimizin memnuniyeti bizim için her şeyden önemlidir. Sizi tekrar ağırlamayı umuyoruz.",
+        ],
+        4: [
+          "Güzel yorumunuz için teşekkür ederiz. Ziyaretinizden memnun kaldığınızı öğrenmek bizi mutlu etti. Tekrar bekliyoruz.",
+          "Değerlendirmeniz için teşekkür ederiz. Daha iyi hizmet sunmak için çalışmaya devam edeceğiz. Tekrar görüşmek dileğiyle.",
+        ],
+        3: [
+          "Geri bildiriminiz için teşekkür ederiz. Hizmetimizi sürekli geliştirmeye çalışıyoruz. Tekrar ziyaretinizde daha iyi bir deneyim sunmayı umuyoruz.",
+          "Görüşleriniz için teşekkür ederiz. Geri bildirimlerinizi dikkate alarak daha iyi olmaya çalışacağız.",
+        ],
+        2: [
+          "Geri bildiriminiz için teşekkür ederiz ve yaşadığınız deneyim için özür dileriz. Konuyu ele almak için lütfen bizimle iletişime geçin.",
+          "Deneyiminiz için özür dileriz. Bu bizim standartlarımızın altında kaldı. Lütfen bizimle iletişime geçin.",
+        ],
+        1: [
+          "Yaşadığınız deneyim için içtenlikle özür dileriz. Bu kabul edilemez bir durumdur. Lütfen doğrudan iletişime geçin; durumu düzeltmek istiyoruz.",
+          "Çok özür dileriz. Bu bizim değerlerimizle bağdaşmıyor. Lütfen bizimle doğrudan iletişime geçin.",
+        ],
+      },
+      short: {
+        5: [
+          "Teşekkürler! 🙏 Bu güzel sözler bizim için çok kıymetli. Yakında tekrar bekliyoruz! 💛",
+          "Ne güzel, çok teşekkürler! 😊 Yakında görüşmek dileğiyle! 💛",
+          "Bu sözler içimizi ısıttı. Teşekkürler! 🙏 Tekrar bekliyoruz.",
+          "Çok teşekkürler! 💛 Yakında görüşürüz! 😊",
+        ],
+        4: [
+          "Güzel yorumunuz için teşekkürler! Tekrar bekliyoruz 😊",
+          "Teşekkürler! Bir sonraki ziyaretinizi bekliyoruz 💛",
+        ],
+        3: [
+          "Geri bildiriminiz için teşekkürler. Daha iyi olmak için çalışıyoruz 🙏",
+          "Teşekkürler, duyuyoruz. Daha iyi olmak istiyoruz 🙏",
+        ],
+        2: [
+          "Üzgünüz, geri bildiriminiz için teşekkürler. Lütfen bize ulaşın 🙏",
+          "Özür dileriz. Lütfen bizimle iletişime geçin 🙏",
+        ],
+        1: [
+          "Çok üzgünüz ve özür dileriz. Lütfen bizimle iletişime geçin 🙏",
+          "Özür dileriz. Lütfen doğrudan bize ulaşın 🙏",
+        ],
+      },
+      apologetic: {
+        5: [
+          "Güzel yorumunuz için çok teşekkür ederiz! Deneyiminizin harika geçtiğini duymak bizi gerçekten mutlu etti. Desteğiniz bizim için çok kıymetli. 🙏",
+          "Bu kadar güzel bir yorum bıraktığınız için minnettarız! 🙏 Sizi mutlu edebildiğimiz için çok sevindik. Yakında tekrar görüşmek dileğiyle! 💛",
+          "Bu sözler bizim için çok değerli. Teşekkür ederiz! 🙏 Sizi ağırlamaktan büyük mutluluk duyduk.",
+        ],
+        4: [
+          "Nazik yorumunuz ve bize verdiğiniz fırsat için teşekkürler! Sizi tekrar ağırlamaktan mutluluk duyarız. 🙏",
+          "Güzel yorumunuz için teşekkür ederiz. 🙏 Bir sonraki ziyaretinizde daha da iyi bir deneyim sunmak isteriz. 💛",
+        ],
+        3: [
+          "Geri bildiriminiz için teşekkür eder, beklentilerinizi tam karşılayamadığımız için özür dileriz. 🙏 Daha iyi olmak için elimizden geleni yapacağız.",
+          "Dürüstlüğünüz için teşekkür ederiz. 🙏 Eksiklerimizin farkındayız ve düzeltmek için çalışıyoruz. Umarız bir şans daha verirsiniz.",
+        ],
+        2: [
+          "Yaşadığınız deneyim için gerçekten üzgünüz. 🙏 Durumu düzeltmek için lütfen bizimle iletişime geçin, sizin için en iyisini yapmak istiyoruz.",
+          "Çok özür dileriz. 🙏 Bu beklediğiniz deneyim olmadı, bunu biliyoruz. Lütfen bize ulaşın.",
+        ],
+        1: [
+          "Yaşadığınız için gerçekten çok üzgünüz ve özür dileriz. 🙏 Lütfen doğrudan bizimle iletişime geçin; durumu düzeltmek istiyoruz.",
+          "Çok özür dileriz. 🙏 Bu kabul edilemez. Sizinle doğrudan konuşmak istiyoruz, lütfen bize ulaşın.",
+        ],
+      },
+    },
+
+    es: {
+      warm: {
+        5: [
+          "Muchísimas gracias por esta reseña tan bonita! 🙏 Saber que disfrutaste nuestro baklava nos llena el corazón. Cada pieza se prepara con amor y los mejores ingredientes, y tus palabras nos inspiran a seguir. ¡Hasta pronto! 💛",
+          "¡Gracias por tus palabras tan amables! 😊 Es el mayor regalo saber que nuestro baklava te alegró el día. ¡Esperamos verte muy pronto! 💛",
+          "¡Nos alegraste el día con esta reseña! 🙏 Ponemos mucho amor en cada pieza y es maravilloso saber que se nota. ¡Hasta pronto! 💛",
+          "¡Gracias de corazón! 😊 Esto es exactamente por lo que hacemos lo que hacemos. ¡Esperamos verte de nuevo muy pronto! 🙏",
+          "¡Qué bonito leer esto! Gracias. 💛 Nos esforzamos mucho por la calidad y es muy gratificante saber que se siente. ¡Vuelve pronto!",
+          "¡Muchas gracias! 🙏 Reseñas como esta nos llenan de energía. ¡Hasta la próxima! 💛",
+        ],
+        4: [
+          "¡Qué bien que disfrutaste tu visita! 😊 Siempre estamos trabajando para mejorar, y reseñas como la tuya nos motivan a seguir. ¡Hasta pronto!",
+          "¡Nos alegra que hayas pasado un buen rato! Siempre hay cosas que pulir, y esperamos que tu próxima visita sea aún mejor. 💛",
+          "¡Gracias por compartir esto! Significa mucho para nosotros. 😊 ¡Te esperamos pronto!",
+          "¡Gracias! Nos alegra que lo hayas disfrutado. Seguimos mejorando cada día. 💛",
+        ],
+        3: [
+          "Gracias por tu opinión honesta. 🙏 Nos tomamos muy en serio todos los comentarios y trabajamos para mejorar. Esperamos que nos des una nueva oportunidad.",
+          "Te agradecemos la sinceridad. 🙏 Sabemos que hay margen de mejora y lo estamos trabajando. Esperamos verte de nuevo.",
+          "Gracias por contarnos. 🙏 Cada opinión nos ayuda a mejorar. Ojalá podamos sorprenderte en tu próxima visita. 💛",
+        ],
+        2: [
+          "Gracias por compartir tu experiencia. Pedimos disculpas porque no cumplimos con tus expectativas. 🙏 Nos gustaría poder remediar la situación, no dudes en contactarnos.",
+          "Lo sentimos mucho. 🙏 Esto no es lo que queremos para nuestros clientes. Por favor contáctanos para que podamos solucionarlo.",
+        ],
+        1: [
+          "Lamentamos mucho lo ocurrido y pedimos sinceras disculpas. 🙏 Por favor contáctanos directamente para que podamos remediar la situación.",
+          "Lo sentimos de verdad. 🙏 Lo que describes no está bien y no lo aceptamos. Por favor contáctanos directamente.",
+        ],
+      },
+      professional: {
+        5: [
+          "Muchas gracias por su valoración. Es un placer saber que disfrutó de su visita. La calidad y autenticidad son nuestra prioridad. Esperamos verle de nuevo pronto.",
+          "Le agradecemos su reseña. Es gratificante saber que nuestro compromiso con la calidad se refleja en la experiencia de nuestros clientes. Esperamos su próxima visita.",
+          "Gracias por sus amables palabras. Nos esforzamos por ofrecer un producto excepcional y es satisfactorio saber que así lo percibe. Esperamos verle pronto.",
+        ],
+        4: [
+          "Gracias por su amable reseña. Nos alegra que su visita haya sido satisfactoria. Esperamos poder atenderle de nuevo.",
+          "Agradecemos su valoración. Continuaremos trabajando para ofrecer la mejor experiencia posible. Esperamos su próxima visita.",
+        ],
+        3: [
+          "Gracias por su opinión. Tomamos todos los comentarios en serio para mejorar continuamente. Esperamos poder ofrecerle una experiencia excepcional en su próxima visita.",
+          "Le agradecemos su feedback. Nos comprometemos a mejorar y esperamos tener la oportunidad de superar sus expectativas.",
+        ],
+        2: [
+          "Gracias por su comentario y lamentamos que su experiencia no haya sido la esperada. Nos gustaría poder atender sus inquietudes directamente.",
+          "Pedimos disculpas por no haber estado a la altura. Nos gustaría hablar con usted directamente para remediar la situación.",
+        ],
+        1: [
+          "Le pedimos sinceras disculpas por su experiencia. Por favor contáctenos directamente para que podamos solucionar la situación.",
+          "Lamentamos profundamente lo ocurrido. Esto no refleja nuestros valores ni nuestros estándares. Por favor contáctenos directamente.",
+        ],
+      },
+      short: {
+        5: [
+          "¡Muchas gracias! 🙏 Tus palabras nos alegran el día. ¡Hasta pronto! 💛",
+          "¡Gracias, esto nos encantó! 😊 ¡Vuelve pronto! 💛",
+          "¡Qué bonito! Gracias. 🙏 ¡Te esperamos! 💛",
+          "¡Gracias de corazón! 😊 ¡Hasta la próxima! 💛",
+        ],
+        4: [
+          "¡Gracias por la reseña! Nos alegra que lo hayas disfrutado. ¡Vuelve pronto! 😊",
+          "¡Gracias! Lo agradecemos mucho. ¡Hasta pronto! 💛",
+        ],
+        3: [
+          "¡Gracias por el feedback! Seguiremos mejorando 🙏",
+          "Gracias por la honestidad. ¡Seguimos trabajando! 🙏",
+        ],
+        2: [
+          "Lo sentimos mucho. Contáctanos para resolverlo 🙏",
+          "Pedimos disculpas. Por favor escríbenos para solucionarlo 🙏",
+        ],
+        1: [
+          "Lo sentimos y pedimos disculpas. Por favor contáctanos directamente. 🙏",
+          "Muy sorry por esto. Por favor contáctanos. 🙏",
+        ],
+      },
+      apologetic: {
+        5: [
+          "¡Gracias por esta maravillosa reseña! Nos alegra mucho que hayas tenido una experiencia tan positiva. Tu apoyo lo significa todo para nosotros. 🙏",
+          "¡Qué alivio y alegría leer esto! Gracias de corazón. 🙏 Esperamos verte de nuevo muy pronto. 💛",
+          "¡Gracias por darnos la oportunidad de servirte! Nos alegra mucho que hayas disfrutado. 🙏 ¡Hasta pronto! 💛",
+        ],
+        4: [
+          "¡Muchas gracias por tu amable reseña y por elegirnos! Esperamos verte de nuevo muy pronto. 🙏",
+          "¡Gracias! Nos alegra que hayas tenido una buena experiencia. 🙏 ¡Esperamos que la próxima sea aún mejor! 💛",
+        ],
+        3: [
+          "Gracias por compartir y disculpa si algo no estuvo a la altura. 🙏 Tu opinión es muy valiosa y haremos todo lo posible para mejorar.",
+          "Te agradecemos la honestidad y pedimos disculpas por los aspectos que fallaron. 🙏 Esperamos poder mejorar en tu próxima visita.",
+        ],
+        2: [
+          "Pedimos sinceras disculpas por tu experiencia. 🙏 Queremos remediar la situación, por favor contáctanos.",
+          "Lo sentimos mucho. 🙏 Esto no es lo que queremos para ti. Contáctanos y lo solucionamos.",
+        ],
+        1: [
+          "Pedimos sinceras disculpas por lo que viviste. 🙏 Por favor contáctanos directamente para que podamos hacer las cosas bien.",
+          "Nos disculpamos de todo corazón. 🙏 Por favor escríbenos directamente.",
+        ],
+      },
+    },
+  };
+
+  // ── Generate ─────────────────────────────────────────────────────────────
+
+  function generateResponse() {
+    const reviewText  = document.getElementById('reviewInput').value.trim();
+    const extraCtx    = document.getElementById('extraContext').value.trim();
+
+    if (!reviewText) {
+      document.getElementById('errorMsg').classList.add('visible');
+      document.getElementById('reviewInput').focus();
+      return;
+    }
+    document.getElementById('errorMsg').classList.remove('visible');
+
+    const lang = selectedLang;
+    const tone = selectedTone;
+    const stars = selectedStars;
+
+    const langTpls = responses[lang] || responses.en;
+    const toneTpls = langTpls[tone]  || langTpls.warm;
+    const starTpls = toneTpls[stars] || toneTpls[stars >= 4 ? 5 : 1];
+
+    let response = pick(starTpls);
+    response = weaveContext(response, extraCtx, lang);
+
+    // Populate output
+    document.getElementById('ctxStars').textContent    = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+    document.getElementById('ctxReview').textContent   = truncate(reviewText, 200);
+    document.getElementById('responseText').textContent = response;
+
+    const toneLabel = { warm:'Warm & Personal', professional:'Professional', short:'Short & Sweet', apologetic:'Apologetic' }[tone];
+    const langLabel = { en:'EN', tr:'TR', es:'ES' }[lang];
+    document.getElementById('outputBadge').textContent = `${stars}★ · ${toneLabel} · ${langLabel}`;
+
+    // Show card with animation
+    const card = document.getElementById('outputCard');
+    card.classList.remove('visible');
+    void card.offsetWidth;
+    card.classList.add('visible');
+    card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+    // Reset copy btn
+    const btn = document.getElementById('copyBtn');
+    btn.classList.remove('copied');
+    btn.textContent = '📋 Copy Response';
+  }
+
+  function copyResponse() {
+    const text = document.getElementById('responseText').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.classList.add('copied');
+      btn.textContent = '✅ Copied to clipboard!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.textContent = '📋 Copy Response';
+      }, 3000);
+    });
+  }
+
+  function weaveContext(base, context, lang) {
+    if (!context) return base;
+    const bridges = {
+      en: [
+        `\n\nWe also want to acknowledge -${context}. We appreciate you sharing that with us.`,
+        `\n\nRegarding ${context} -thank you for mentioning it, we really take that on board.`,
+        `\n\nWe noted your comment about ${context}, and it means a lot to us that you shared it.`,
+      ],
+      tr: [
+        `\n\n${context} hakkındaki yorumunuz için de teşekkür ederiz -bu bizim için çok değerli.`,
+        `\n\n${context} konusundaki geri bildiriminizi dikkate alıyoruz, teşekkürler.`,
+      ],
+      es: [
+        `\n\nTambién queremos agradecer que hayas mencionado ${context} -lo tenemos muy en cuenta.`,
+        `\n\nTu comentario sobre ${context} nos ha llegado al corazón, gracias por compartirlo.`,
+      ],
+    };
+    return base + pick(bridges[lang] || bridges.en);
+  }
+
+  // Default
+  setStars(5);
+</script>
+</body>
+</html>
